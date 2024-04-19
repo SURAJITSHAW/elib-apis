@@ -1,0 +1,1 @@
+![alt text](globalErrorHandler.png)
