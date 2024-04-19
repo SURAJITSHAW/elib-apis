@@ -8,7 +8,7 @@ const bookSchema = new mongoose.Schema(
       required: true,
     },
     author: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     genre: {
@@ -20,8 +20,8 @@ const bookSchema = new mongoose.Schema(
       required: true,
     },
     file: {
-        type: String, // You might store the path to the book file
-        required: true,
+      type: String, // You might store the path to the book file
+      required: true,
     },
   },
   { timestamps: true }
