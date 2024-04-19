@@ -15,7 +15,7 @@ const bookSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    coverPhoto: {
+    coverImage: {
       type: String, // You might store the URL to the cover photo
       required: true,
     },
