@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response, raw } from "express";
 import cloudinary from "../utils/cloudinary";
 import createHttpError from "http-errors";
-import Book from "./bookModel";
+import BookModel from "./bookModel";
 import fs from "node:fs"
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
     const {title, genre} = req.body;
     if (!req.files) {
-      return next(createHttpError(400, "No cover image uploaded"));
+      return next(createHttpError(400, "No cover image or pdf uploaded"));
     }
 
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -28,13 +28,18 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     // store in db
-    const book = await Book.create({
-      title,
-      genre,
-      coverImage: coverImageUpload.secure_url,
-      file: bookPdfUpload.secure_url,
-      author: "6622480a7c5bed6d6de14bf4"
-    });
+    let book;
+    try {
+      book = new BookModel({
+        title,
+        genre,
+        coverImage: coverImageUpload.secure_url,
+        file: bookPdfUpload.secure_url,
+        author: "6622480a7c5bed6d6de14bf4",
+      });
+    } catch (error) {
+      return next(createHttpError(500, "Internal Server Error"))
+    }
 
     try {
       // Delete the local file after upload (optional)
